@@ -1,0 +1,1541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#8b7cf6">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <title>Liquid Glass Suite</title>
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root {
+            --text-primary: #1E2235;
+            --text-secondary: #5A617A;
+            --glass-bg: linear-gradient(145deg, rgba(255, 255, 255, 0.62) 0%, rgba(255, 255, 255, 0.28) 100%);
+            --glass-card-bg: linear-gradient(145deg, rgba(255, 255, 255, 0.72) 0%, rgba(255, 255, 255, 0.36) 100%);
+            --glass-border-top: rgba(255, 255, 255, 0.92);
+            --glass-border-bottom: rgba(255, 255, 255, 0.35);
+            --glass-shadow: 0 18px 40px -12px rgba(48, 52, 92, 0.14), 0 4px 14px -2px rgba(48, 52, 92, 0.06), inset 0 1.5px 1px rgba(255, 255, 255, 0.9);
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            min-height: 100dvh;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, #dce2f9 0%, #ebe5f8 35%, #f6e4e6 70%, #dceaf4 100%);
+            background-attachment: fixed;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Floating Ambient Blurred Refraction Orbs */
+        .ambient-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(70px);
+            opacity: 0.75;
+            animation: floatOrb 18s ease-in-out infinite alternate;
+        }
+
+        .orb-1 {
+            width: 340px;
+            height: 340px;
+            top: -80px;
+            left: -60px;
+            background: radial-gradient(circle, rgba(139, 124, 246, 0.55) 0%, rgba(167, 139, 250, 0) 70%);
+        }
+
+        .orb-2 {
+            width: 380px;
+            height: 380px;
+            top: 28%;
+            right: -110px;
+            background: radial-gradient(circle, rgba(251, 182, 165, 0.6) 0%, rgba(253, 186, 116, 0) 70%);
+            animation-delay: -5s;
+        }
+
+        .orb-3 {
+            width: 360px;
+            height: 360px;
+            bottom: -90px;
+            left: 10%;
+            background: radial-gradient(circle, rgba(94, 211, 214, 0.48) 0%, rgba(56, 189, 248, 0) 70%);
+            animation-delay: -10s;
+        }
+
+        @keyframes floatOrb {
+            0% { transform: translate(0px, 0px) scale(1); }
+            50% { transform: translate(22px, -18px) scale(1.06); }
+            100% { transform: translate(-15px, 24px) scale(0.96); }
+        }
+
+        /* Core Liquid Glass Panel */
+        .liquid-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            border-top: 1.5px solid var(--glass-border-top);
+            border-left: 1.5px solid var(--glass-border-top);
+            border-right: 1px solid var(--glass-border-bottom);
+            border-bottom: 1px solid var(--glass-border-bottom);
+            box-shadow: var(--glass-shadow);
+            border-radius: 28px;
+        }
+
+        .liquid-card {
+            background: var(--glass-card-bg);
+            backdrop-filter: blur(20px) saturate(175%);
+            -webkit-backdrop-filter: blur(20px) saturate(175%);
+            border-top: 1.5px solid rgba(255, 255, 255, 0.92);
+            border-left: 1.5px solid rgba(255, 255, 255, 0.85);
+            border-right: 1px solid rgba(255, 255, 255, 0.35);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+            box-shadow: 0 10px 26px -8px rgba(48, 52, 92, 0.1), inset 0 1px 1px rgba(255, 255, 255, 0.85);
+            border-radius: 22px;
+        }
+
+        /* Iridescent Hero Card (Budget Balance) */
+        .liquid-iridescent-card {
+            background: linear-gradient(135deg, rgba(255, 215, 202, 0.72) 0%, rgba(226, 218, 252, 0.72) 52%, rgba(196, 236, 248, 0.76) 100%);
+            backdrop-filter: blur(24px) saturate(190%);
+            -webkit-backdrop-filter: blur(24px) saturate(190%);
+            border-top: 1.5px solid rgba(255, 255, 255, 0.95);
+            border-left: 1.5px solid rgba(255, 255, 255, 0.9);
+            border-right: 1px solid rgba(255, 255, 255, 0.45);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.45);
+            box-shadow: 0 16px 34px -10px rgba(124, 108, 235, 0.22), inset 0 1.5px 2px rgba(255, 255, 255, 0.95);
+            border-radius: 24px;
+        }
+
+        /* Tactile Primary & Secondary Pill Buttons */
+        .btn-liquid-primary {
+            background: linear-gradient(135deg, #8b76f9 0%, #6d5ce8 100%);
+            color: #ffffff;
+            border-radius: 9999px;
+            border-top: 1.5px solid rgba(255, 255, 255, 0.75);
+            border-left: 1px solid rgba(255, 255, 255, 0.5);
+            border-right: 1px solid rgba(88, 70, 214, 0.4);
+            border-bottom: 1px solid rgba(88, 70, 214, 0.5);
+            box-shadow: 0 10px 22px -6px rgba(109, 92, 232, 0.52), inset 0 2px 3px rgba(255, 255, 255, 0.55);
+            transition: transform 0.16s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.16s ease, filter 0.16s ease;
+        }
+
+        .btn-liquid-primary:hover {
+            filter: brightness(1.04);
+            box-shadow: 0 14px 26px -6px rgba(109, 92, 232, 0.6), inset 0 2px 4px rgba(255, 255, 255, 0.65);
+        }
+
+        .btn-liquid-primary:active {
+            transform: scale(0.96);
+        }
+
+        .btn-liquid-secondary {
+            background: linear-gradient(135deg, #6bd3d6 0%, #4ab7bd 100%);
+            color: #ffffff;
+            border-radius: 9999px;
+            border-top: 1.5px solid rgba(255, 255, 255, 0.78);
+            border-left: 1px solid rgba(255, 255, 255, 0.55);
+            border-right: 1px solid rgba(56, 152, 158, 0.35);
+            border-bottom: 1px solid rgba(56, 152, 158, 0.45);
+            box-shadow: 0 10px 22px -6px rgba(74, 183, 189, 0.48), inset 0 2px 3px rgba(255, 255, 255, 0.6);
+            transition: transform 0.16s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.16s ease;
+        }
+
+        .btn-liquid-secondary:active {
+            transform: scale(0.96);
+        }
+
+        /* Circular & Pill Glass Icon Buttons */
+        .btn-glass-icon {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0.45) 100%);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-top: 1.5px solid rgba(255, 255, 255, 0.95);
+            border-left: 1.5px solid rgba(255, 255, 255, 0.9);
+            border-right: 1px solid rgba(255, 255, 255, 0.4);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 6px 16px -4px rgba(48, 52, 92, 0.12), inset 0 1px 1px rgba(255, 255, 255, 0.9);
+            color: var(--text-primary);
+            transition: transform 0.14s ease, background 0.14s ease;
+        }
+
+        .btn-glass-icon:active {
+            transform: scale(0.93);
+        }
+
+        /* Liquid Input Fields */
+        .input-liquid {
+            background: rgba(255, 255, 255, 0.72);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.85);
+            box-shadow: inset 0 2px 5px rgba(48, 52, 92, 0.05), 0 2px 8px rgba(255, 255, 255, 0.5);
+            border-radius: 9999px;
+            color: var(--text-primary);
+            outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        }
+
+        .input-liquid:focus {
+            background: rgba(255, 255, 255, 0.92);
+            border-color: rgba(139, 118, 249, 0.65);
+            box-shadow: inset 0 1px 3px rgba(48, 52, 92, 0.04), 0 0 0 3px rgba(139, 118, 249, 0.18);
+        }
+
+        .input-liquid::placeholder {
+            color: #7c839e;
+        }
+
+        /* Segmented Pill Tab Control with Sliding Indicator */
+        .segmented-track {
+            position: relative;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            padding: 5px;
+            background: rgba(255, 255, 255, 0.42);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(255, 255, 255, 0.75);
+            box-shadow: inset 0 2px 6px rgba(48, 52, 92, 0.06), 0 6px 18px -6px rgba(48, 52, 92, 0.08);
+            border-radius: 9999px;
+        }
+
+        .segmented-thumb {
+            position: absolute;
+            top: 5px;
+            bottom: 5px;
+            left: 5px;
+            width: calc((100% - 10px) / 3);
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 255, 255, 0.78) 100%);
+            border-radius: 9999px;
+            box-shadow: 0 6px 16px -3px rgba(74, 68, 138, 0.18), inset 0 1px 1px #ffffff;
+            transition: transform 0.28s cubic-bezier(0.34, 1.36, 0.64, 1);
+            z-index: 1;
+        }
+
+        .segmented-btn {
+            position: relative;
+            z-index: 2;
+            padding: 10px 8px;
+            font-size: 0.84rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: color 0.2s ease;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .segmented-btn.active {
+            color: #5b49dc;
+        }
+
+        /* Calculator Tactile Glass Keys */
+        .calc-key {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.82) 0%, rgba(255, 255, 255, 0.42) 100%);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-top: 1.5px solid rgba(255, 255, 255, 0.95);
+            border-left: 1.5px solid rgba(255, 255, 255, 0.88);
+            border-right: 1px solid rgba(255, 255, 255, 0.35);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+            box-shadow: 0 6px 14px -4px rgba(48, 52, 92, 0.1), inset 0 1px 1px rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            user-select: none;
+            transition: transform 0.1s ease, background 0.12s ease;
+        }
+
+        .calc-key:active {
+            transform: scale(0.93);
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .calc-key-op {
+            background: linear-gradient(145deg, rgba(235, 230, 255, 0.88) 0%, rgba(215, 206, 255, 0.58) 100%);
+            color: #5b49dc;
+            font-weight: 700;
+        }
+
+        .calc-key-fn {
+            background: linear-gradient(145deg, rgba(220, 245, 246, 0.85) 0%, rgba(196, 236, 238, 0.55) 100%);
+            color: #1c7c82;
+            font-weight: 700;
+        }
+
+        .calc-key-eq {
+            background: linear-gradient(135deg, #8b76f9 0%, #6d5ce8 100%);
+            color: #ffffff;
+            border-top: 1.5px solid rgba(255, 255, 255, 0.78);
+            box-shadow: 0 10px 20px -5px rgba(109, 92, 232, 0.5), inset 0 2px 3px rgba(255, 255, 255, 0.6);
+            font-size: 1.35rem;
+        }
+
+        /* Rich Text Editor Styles */
+        #richEditor {
+            min-height: 210px;
+            max-height: 360px;
+            overflow-y: auto;
+            outline: none;
+            line-height: 1.65;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+        }
+
+        #richEditor:empty:before {
+            content: attr(data-placeholder);
+            color: #7c839e;
+            pointer-events: none;
+        }
+
+        #richEditor blockquote {
+            border-left: 3px solid #8b76f9;
+            padding-left: 12px;
+            margin: 8px 0;
+            color: var(--text-secondary);
+            font-style: italic;
+            background: rgba(139, 118, 249, 0.07);
+            border-radius: 0 10px 10px 0;
+            padding-top: 4px;
+            padding-bottom: 4px;
+        }
+
+        #richEditor ul {
+            list-style-type: disc;
+            padding-left: 22px;
+            margin: 6px 0;
+        }
+
+        #richEditor ol {
+            list-style-type: decimal;
+            padding-left: 22px;
+            margin: 6px 0;
+        }
+
+        /* Custom Subtle Scrollbars */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .glass-scroll::-webkit-scrollbar {
+            width: 5px;
+        }
+        .glass-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .glass-scroll::-webkit-scrollbar-thumb {
+            background: rgba(90, 97, 122, 0.22);
+            border-radius: 9999px;
+        }
+
+        /* Toast Notification */
+        #toastBanner {
+            transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s ease;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-violet-200 selection:text-violet-900">
+
+    <!-- Ambient Refraction Orbs -->
+    <div class="ambient-canvas" aria-hidden="true">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <!-- Main Mobile-First Container -->
+    <div class="relative z-10 max-w-lg mx-auto px-3.5 sm:px-5 pt-3.5 pb-10 flex flex-col gap-3.5">
+
+        <!-- Top Header Bar -->
+        <header class="liquid-panel px-4 py-3 flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2.5 min-w-0">
+                <div class="w-9 h-9 rounded-2xl bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-violet-400/30 border border-white/70 flex-shrink-0">
+                    <i data-lucide="sparkles" class="w-4 h-4"></i>
+                </div>
+                <div class="min-w-0">
+                    <h1 class="text-sm sm:text-base font-bold tracking-tight text-[#1E2235] truncate">Liquid Glass Suite</h1>
+                    <div class="flex items-center gap-1.5">
+                        <span id="offlineDot" class="w-2 h-2 rounded-full bg-teal-500 animate-pulse"></span>
+                        <span id="offlineStatusText" class="text-[11px] font-medium text-[#5A617A]">Offline Ready • Local</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2 flex-shrink-0">
+                <!-- PWA Install Button (Shown when installable) -->
+                <button id="installAppBtn" class="hidden btn-liquid-secondary px-3 py-1.5 text-xs font-semibold flex items-center gap-1.5">
+                    <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                    <span>Install</span>
+                </button>
+
+                <!-- Device Vault / Backup Modal Button -->
+                <button id="openVaultBtn" aria-label="Device Storage Vault" class="btn-glass-icon px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5">
+                    <i data-lucide="shield-check" class="w-4 h-4 text-violet-600"></i>
+                    <span class="hidden xs:inline">Vault</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Segmented Pill Tab Navigation -->
+        <nav class="segmented-track" role="tablist" aria-label="App Modules">
+            <div id="segmentedThumb" class="segmented-thumb"></div>
+
+            <button type="button" role="tab" aria-selected="true" data-tab="0" onclick="switchTab(0)" class="segmented-btn active">
+                <i data-lucide="file-text" class="w-4 h-4"></i>
+                <span>Notepad</span>
+            </button>
+
+            <button type="button" role="tab" aria-selected="false" data-tab="1" onclick="switchTab(1)" class="segmented-btn">
+                <i data-lucide="calculator" class="w-4 h-4"></i>
+                <span>Calculator</span>
+            </button>
+
+            <button type="button" role="tab" aria-selected="false" data-tab="2" onclick="switchTab(2)" class="segmented-btn">
+                <i data-lucide="wallet" class="w-4 h-4"></i>
+                <span>Budget</span>
+            </button>
+        </nav>
+
+        <!-- ========================================================= -->
+        <!-- MODULE 1: RICH TEXT NOTEPAD (AUTO-SAVE)                   -->
+        <!-- ========================================================= -->
+        <section id="module-0" class="flex flex-col gap-3">
+            <!-- Search & New Note Bar -->
+            <div class="liquid-panel p-3.5 flex flex-col gap-3">
+                <div class="flex items-center gap-2">
+                    <div class="relative flex-1">
+                        <i data-lucide="search" class="w-4 h-4 text-[#5A617A] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+                        <input id="noteSearchInput" type="text" placeholder="Search notes..." class="input-liquid w-full pl-9 pr-4 py-2 text-xs font-medium">
+                    </div>
+                    <button id="newNoteBtn" type="button" class="btn-liquid-primary px-3.5 py-2 text-xs font-semibold flex items-center gap-1.5 flex-shrink-0">
+                        <i data-lucide="plus" class="w-4 h-4"></i>
+                        <span>New Note</span>
+                    </button>
+                </div>
+
+                <!-- Horizontal Note Pill Switcher -->
+                <div id="notePillsContainer" class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-0.5">
+                    <!-- Note pills injected via JS -->
+                </div>
+            </div>
+
+            <!-- Main Note Editor Panel -->
+            <div class="liquid-panel p-4 flex flex-col gap-3">
+                <div class="flex items-center justify-between gap-2 border-b border-white/50 pb-2.5">
+                    <input id="noteTitleInput" type="text" placeholder="Untitled Note..." class="bg-transparent text-base sm:text-lg font-bold text-[#1E2235] placeholder-[#7c839e] outline-none w-full">
+                    <span id="noteSaveBadge" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/65 border border-white/80 text-[11px] font-semibold text-teal-700 flex-shrink-0">
+                        <i data-lucide="check-circle-2" class="w-3 h-3"></i>
+                        <span>Saved</span>
+                    </span>
+                </div>
+
+                <!-- Floating Glass Formatting Toolbar -->
+                <div class="flex items-center justify-between gap-1 bg-white/55 backdrop-blur-md border border-white/85 rounded-full px-2 py-1.5 shadow-sm overflow-x-auto no-scrollbar">
+                    <div class="flex items-center gap-1">
+                        <button type="button" onclick="formatDoc('bold')" title="Bold" class="w-8 h-8 rounded-full hover:bg-white/80 flex items-center justify-center text-[#1E2235] transition">
+                            <i data-lucide="bold" class="w-3.5 h-3.5"></i>
+                        </button>
+                        <button type="button" onclick="formatDoc('italic')" title="Italic" class="w-8 h-8 rounded-full hover:bg-white/80 flex items-center justify-center text-[#1E2235] transition">
+                            <i data-lucide="italic" class="w-3.5 h-3.5"></i>
+                        </button>
+                        <button type="button" onclick="formatDoc('underline')" title="Underline" class="w-8 h-8 rounded-full hover:bg-white/80 flex items-center justify-center text-[#1E2235] transition">
+                            <i data-lucide="underline" class="w-3.5 h-3.5"></i>
+                        </button>
+                        <div class="w-px h-4 bg-slate-300/60 mx-0.5"></div>
+                        <button type="button" onclick="formatDoc('insertUnorderedList')" title="Bullet List" class="w-8 h-8 rounded-full hover:bg-white/80 flex items-center justify-center text-[#1E2235] transition">
+                            <i data-lucide="list" class="w-3.5 h-3.5"></i>
+                        </button>
+                        <button type="button" onclick="formatDoc('insertOrderedList')" title="Numbered List" class="w-8 h-8 rounded-full hover:bg-white/80 flex items-center justify-center text-[#1E2235] transition">
+                            <i data-lucide="list-ordered" class="w-3.5 h-3.5"></i>
+                        </button>
+                        <button type="button" onclick="toggleBlockquote()" title="Quote" class="w-8 h-8 rounded-full hover:bg-white/80 flex items-center justify-center text-[#1E2235] transition">
+                            <i data-lucide="quote" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </div>
+
+                    <div class="flex items-center gap-1 pl-2">
+                        <button type="button" id="copyNoteBtn" title="Copy Note Text" class="w-8 h-8 rounded-full hover:bg-white/80 flex items-center justify-center text-violet-700 transition">
+                            <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                        </button>
+                        <button type="button" id="deleteNoteBtn" title="Delete Note" class="w-8 h-8 rounded-full hover:bg-rose-100/80 flex items-center justify-center text-rose-600 transition">
+                            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ContentEditable Rich Text Surface -->
+                <div id="richEditor" contenteditable="true" data-placeholder="Start writing your thoughts here... Everything auto-saves directly to your device." class="glass-scroll px-1 py-1"></div>
+
+                <!-- Footer Word & Character Count -->
+                <div class="flex items-center justify-between text-[11px] font-medium text-[#5A617A] border-t border-white/50 pt-2">
+                    <span id="noteUpdatedMeta">Updated just now</span>
+                    <span id="noteStats">0 words • 0 chars</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- MODULE 2: AUTO-LOGGING CALCULATOR                         -->
+        <!-- ========================================================= -->
+        <section id="module-1" class="hidden flex-col gap-3">
+            <!-- Calculator Body -->
+            <div class="liquid-panel p-4 flex flex-col gap-3.5">
+                <!-- Frosted Display -->
+                <div class="liquid-card px-4 py-4 flex flex-col items-end justify-between min-h-[104px] overflow-hidden">
+                    <div id="calcExpression" class="text-xs sm:text-sm font-medium text-[#5A617A] tracking-wide truncate max-w-full min-h-[20px]">0</div>
+                    <div id="calcDisplay" class="text-3xl sm:text-4xl font-extrabold text-[#1E2235] tracking-tight truncate max-w-full mt-1">0</div>
+                </div>
+
+                <!-- Tactile 4x5 Glass Keypad -->
+                <div class="grid grid-cols-4 gap-2.5">
+                    <button type="button" onclick="calcClear()" class="calc-key calc-key-fn">C</button>
+                    <button type="button" onclick="calcBackspace()" aria-label="Backspace" class="calc-key calc-key-fn">
+                        <i data-lucide="delete" class="w-5 h-5"></i>
+                    </button>
+                    <button type="button" onclick="calcPercent()" class="calc-key calc-key-fn">%</button>
+                    <button type="button" onclick="calcInputOp('/')" class="calc-key calc-key-op">÷</button>
+
+                    <button type="button" onclick="calcInputDigit('7')" class="calc-key">7</button>
+                    <button type="button" onclick="calcInputDigit('8')" class="calc-key">8</button>
+                    <button type="button" onclick="calcInputDigit('9')" class="calc-key">9</button>
+                    <button type="button" onclick="calcInputOp('*')" class="calc-key calc-key-op">×</button>
+
+                    <button type="button" onclick="calcInputDigit('4')" class="calc-key">4</button>
+                    <button type="button" onclick="calcInputDigit('5')" class="calc-key">5</button>
+                    <button type="button" onclick="calcInputDigit('6')" class="calc-key">6</button>
+                    <button type="button" onclick="calcInputOp('-')" class="calc-key calc-key-op">−</button>
+
+                    <button type="button" onclick="calcInputDigit('1')" class="calc-key">1</button>
+                    <button type="button" onclick="calcInputDigit('2')" class="calc-key">2</button>
+                    <button type="button" onclick="calcInputDigit('3')" class="calc-key">3</button>
+                    <button type="button" onclick="calcInputOp('+')" class="calc-key calc-key-op">+</button>
+
+                    <button type="button" onclick="calcToggleSign()" class="calc-key">±</button>
+                    <button type="button" onclick="calcInputDigit('0')" class="calc-key">0</button>
+                    <button type="button" onclick="calcInputDot()" class="calc-key">.</button>
+                    <button type="button" onclick="calcEvaluate()" class="calc-key calc-key-eq">=</button>
+                </div>
+            </div>
+
+            <!-- Auto-Logged Calculation History Tape -->
+            <div class="liquid-panel p-4 flex flex-col gap-2.5">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="history" class="w-4 h-4 text-violet-600"></i>
+                        <h2 class="text-xs font-bold uppercase tracking-wider text-[#1E2235]">Calculation Tape</h2>
+                    </div>
+                    <button type="button" id="clearCalcHistoryBtn" class="text-[11px] font-semibold text-rose-600 hover:text-rose-700 px-2.5 py-1 rounded-full bg-white/60 border border-white/80 transition">
+                        Clear History
+                    </button>
+                </div>
+
+                <div id="calcHistoryList" class="flex flex-col gap-2 max-h-56 overflow-y-auto glass-scroll pr-0.5">
+                    <!-- History items rendered via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- MODULE 3: MONTHLY BUDGET TRACKER (SRI LANKAN RUPEES - LKR) -->
+        <!-- ========================================================= -->
+        <section id="module-2" class="hidden flex-col gap-3">
+            <!-- Iridescent Net Balance & Summary Hero Card -->
+            <div class="liquid-iridescent-card p-4 flex flex-col gap-3.5">
+                <div class="flex items-center justify-between gap-2">
+                    <div>
+                        <p class="text-[11px] font-bold uppercase tracking-wider text-[#5A617A]">Net Balance (LKR)</p>
+                        <h2 id="budgetNetBalance" class="text-2xl sm:text-3xl font-extrabold text-[#1E2235] tracking-tight mt-0.5">Rs. 0.00</h2>
+                    </div>
+                    <input id="budgetMonthPicker" type="month" aria-label="Select Budget Month" class="input-liquid px-3 py-1.5 text-xs font-semibold text-[#1E2235] cursor-pointer">
+                </div>
+
+                <!-- Side-by-Side Income & Expense Summary Cards -->
+                <div class="grid grid-cols-2 gap-2.5">
+                    <div class="bg-teal-50/75 backdrop-blur-md rounded-2xl p-3 border border-white/90 flex items-center gap-2.5 shadow-sm">
+                        <div class="w-8 h-8 rounded-full bg-teal-500/20 text-teal-700 flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="arrow-down-left" class="w-4 h-4"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <p class="text-[10px] font-semibold uppercase tracking-wide text-teal-800/75">Income</p>
+                            <p id="budgetTotalIncome" class="text-xs sm:text-sm font-bold text-teal-800 truncate">Rs. 0.00</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-rose-50/75 backdrop-blur-md rounded-2xl p-3 border border-white/90 flex items-center gap-2.5 shadow-sm">
+                        <div class="w-8 h-8 rounded-full bg-rose-500/20 text-rose-700 flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <p class="text-[10px] font-semibold uppercase tracking-wide text-rose-800/75">Expenses</p>
+                            <p id="budgetTotalExpense" class="text-xs sm:text-sm font-bold text-rose-800 truncate">Rs. 0.00</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visual Spending Ratio Progress Bar -->
+                <div class="flex flex-col gap-1.5">
+                    <div class="flex items-center justify-between text-[11px] font-semibold text-[#5A617A]">
+                        <span>Monthly Expense Ratio</span>
+                        <span id="budgetRatioText">0% spent</span>
+                    </div>
+                    <div class="w-full h-2.5 rounded-full bg-white/65 border border-white/90 overflow-hidden p-0.5">
+                        <div id="budgetRatioBar" class="h-full rounded-full bg-gradient-to-r from-teal-400 via-violet-500 to-rose-500 transition-all duration-300" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick-Add Transaction Form -->
+            <form id="budgetForm" class="liquid-panel p-4 flex flex-col gap-3">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold uppercase tracking-wider text-[#1E2235]">Add Transaction</span>
+
+                    <!-- Income / Expense Pill Toggle -->
+                    <div class="inline-flex p-1 rounded-full bg-white/55 border border-white/85">
+                        <button type="button" id="toggleExpenseBtn" onclick="setTxType('expense')" class="px-3 py-1 rounded-full text-xs font-semibold bg-rose-500 text-white shadow-sm transition">
+                            Expense
+                        </button>
+                        <button type="button" id="toggleIncomeBtn" onclick="setTxType('income')" class="px-3 py-1 rounded-full text-xs font-semibold text-[#5A617A] transition">
+                            Income
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-5 gap-2">
+                    <input id="txTitle" type="text" required placeholder="Description (e.g. Groceries)" class="input-liquid col-span-3 px-3.5 py-2.5 text-xs font-medium">
+                    <div class="relative col-span-2">
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-[#5A617A] pointer-events-none">Rs.</span>
+                        <input id="txAmount" type="number" step="0.01" min="0.01" required placeholder="0.00" class="input-liquid w-full pl-9 pr-3 py-2.5 text-xs font-bold text-right">
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <select id="txCategory" aria-label="Transaction Category" class="input-liquid flex-1 px-3.5 py-2.5 text-xs font-semibold text-[#1E2235] cursor-pointer">
+                        <option value="Food & Dining">Food & Dining</option>
+                        <option value="Transport">Transport</option>
+                        <option value="Bills & Utilities">Bills & Utilities</option>
+                        <option value="Shopping">Shopping</option>
+                        <option value="Health & Fitness">Health & Fitness</option>
+                        <option value="Salary">Salary</option>
+                        <option value="Freelance">Freelance</option>
+                        <option value="Other">Other</option>
+                    </select>
+
+                    <button type="submit" class="btn-liquid-primary px-4 py-2.5 text-xs font-semibold flex items-center gap-1.5 flex-shrink-0">
+                        <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                        <span>Add Entry</span>
+                    </button>
+                </div>
+            </form>
+
+            <!-- Scrollable Transaction History List -->
+            <div class="liquid-panel p-4 flex flex-col gap-2.5">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-[#1E2235]">Transactions (LKR)</h3>
+                    <span id="txCountBadge" class="text-[11px] font-semibold text-[#5A617A] px-2.5 py-0.5 rounded-full bg-white/60 border border-white/80">0 entries</span>
+                </div>
+
+                <div id="budgetTxList" class="flex flex-col gap-2 max-h-64 overflow-y-auto glass-scroll pr-0.5">
+                    <!-- Transactions rendered via JS -->
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- DEVICE VAULT & BACKUP MODAL                               -->
+    <!-- ========================================================= -->
+    <div id="vaultModal" class="hidden fixed inset-0 z-50 bg-slate-900/30 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="liquid-panel w-full max-w-md p-5 flex flex-col gap-4 animate-[fadeIn_0.2s_ease]">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-full bg-violet-500/15 text-violet-700 flex items-center justify-center">
+                        <i data-lucide="hard-drive" class="w-4 h-4"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-bold text-[#1E2235]">Device Storage Vault</h3>
+                        <p class="text-[11px] text-[#5A617A]">100% On-Device Offline Persistence</p>
+                    </div>
+                </div>
+                <button id="closeVaultBtn" type="button" aria-label="Close Vault" class="btn-glass-icon w-8 h-8 rounded-full flex items-center justify-center">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+
+            <div class="liquid-card p-3.5 flex flex-col gap-2 text-xs">
+                <div class="flex items-center justify-between">
+                    <span class="text-[#5A617A] font-medium">Local Storage Used:</span>
+                    <span id="vaultStorageSize" class="font-bold text-[#1E2235]">0 KB</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-[#5A617A] font-medium">Saved Notes:</span>
+                    <span id="vaultNotesCount" class="font-bold text-[#1E2235]">0</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-[#5A617A] font-medium">Calculator Logs:</span>
+                    <span id="vaultCalcCount" class="font-bold text-[#1E2235]">0</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-[#5A617A] font-medium">Budget Entries (LKR):</span>
+                    <span id="vaultBudgetCount" class="font-bold text-[#1E2235]">0</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2.5">
+                <button id="exportBackupBtn" type="button" class="btn-liquid-primary py-2.5 px-3 text-xs font-semibold flex items-center justify-center gap-1.5">
+                    <i data-lucide="download" class="w-4 h-4"></i>
+                    <span>Export JSON Backup</span>
+                </button>
+                <label class="btn-liquid-secondary py-2.5 px-3 text-xs font-semibold flex items-center justify-center gap-1.5 cursor-pointer">
+                    <i data-lucide="upload" class="w-4 h-4"></i>
+                    <span>Import Backup</span>
+                    <input id="importBackupInput" type="file" accept=".json,application/json" class="hidden">
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Non-Blocking Liquid Glass Toast Banner -->
+    <div id="toastBanner" class="fixed bottom-5 left-1/2 -translate-x-1/2 translate-y-20 opacity-0 pointer-events-none z-50 liquid-panel px-4 py-2.5 flex items-center gap-2 text-xs font-semibold text-[#1E2235]">
+        <i data-lucide="sparkles" class="w-4 h-4 text-violet-600"></i>
+        <span id="toastMessage">Saved to device</span>
+    </div>
+
+    <script>
+        // =========================================================
+        // 1. INLINE PWA MANIFEST & OFFLINE SERVICE WORKER
+        // =========================================================
+        (function setupPWA() {
+            try {
+                const manifestObj = {
+                    name: "Liquid Glass Suite",
+                    short_name: "GlassSuite",
+                    start_url: ".",
+                    display: "standalone",
+                    background_color: "#dce2f9",
+                    theme_color: "#8b7cf6",
+                    description: "Offline-capable Liquid Glass Notepad, Calculator, and LKR Budget Tracker.",
+                    icons: [
+                        {
+                            src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%238b76f9'/%3E%3Cstop offset='100%25' stop-color='%234ab7bd'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='192' height='192' rx='48' fill='url(%23g)'/%3E%3Ccircle cx='96' cy='96' r='44' fill='none' stroke='white' stroke-width='12'/%3E%3C/svg%3E",
+                            sizes: "192x192",
+                            type: "image/svg+xml"
+                        }
+                    ]
+                };
+
+                const manifestBlob = new Blob([JSON.stringify(manifestObj)], { type: 'application/json' });
+                const manifestURL = URL.createObjectURL(manifestBlob);
+                const linkEl = document.createElement('link');
+                linkEl.rel = 'manifest';
+                linkEl.href = manifestURL;
+                document.head.appendChild(linkEl);
+
+                // Inline Service Worker for Offline Caching
+                if ('serviceWorker' in navigator && (window.location.protocol === 'https:' || window.location.protocol === 'http:')) {
+                    const swCode = `
+                        const CACHE_NAME = 'liquid-glass-suite-v1';
+                        self.addEventListener('install', (e) => {
+                            self.skipWaiting();
+                        });
+                        self.addEventListener('activate', (e) => {
+                            e.waitUntil(self.clients.claim());
+                        });
+                        self.addEventListener('fetch', (e) => {
+                            if (e.request.method !== 'GET') return;
+                            e.respondWith(
+                                caches.open(CACHE_NAME).then((cache) =>
+                                    cache.match(e.request).then((cached) => {
+                                        const fetched = fetch(e.request).then((networkRes) => {
+                                            if (networkRes && networkRes.status === 200) {
+                                                cache.put(e.request, networkRes.clone());
+                                            }
+                                            return networkRes;
+                                        }).catch(() => cached);
+                                        return cached || fetched;
+                                    })
+                                )
+                            );
+                        });
+                    `;
+                    const swBlob = new Blob([swCode], { type: 'application/javascript' });
+                    const swURL = URL.createObjectURL(swBlob);
+                    navigator.serviceWorker.register(swURL).catch(() => {});
+                }
+            } catch (err) {
+                console.warn('PWA setup notice:', err);
+            }
+        })();
+
+        // Install Prompt Handling
+        let deferredInstallPrompt = null;
+        const installAppBtn = document.getElementById('installAppBtn');
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredInstallPrompt = e;
+            installAppBtn.classList.remove('hidden');
+        });
+
+        installAppBtn.addEventListener('click', async () => {
+            if (!deferredInstallPrompt) return;
+            deferredInstallPrompt.prompt();
+            await deferredInstallPrompt.userChoice;
+            deferredInstallPrompt = null;
+            installAppBtn.classList.add('hidden');
+        });
+
+        // Live Online / Offline Status Indicator
+        function updateNetworkBadge() {
+            const dot = document.getElementById('offlineDot');
+            const label = document.getElementById('offlineStatusText');
+            if (navigator.onLine) {
+                dot.className = 'w-2 h-2 rounded-full bg-teal-500 animate-pulse';
+                label.textContent = 'Offline Ready • Local';
+            } else {
+                dot.className = 'w-2 h-2 rounded-full bg-violet-500';
+                label.textContent = 'Offline Mode • Local';
+            }
+        }
+        window.addEventListener('online', updateNetworkBadge);
+        window.addEventListener('offline', updateNetworkBadge);
+
+        // =========================================================
+        // 2. LOCAL STORAGE HELPERS & TOAST FEEDBACK
+        // =========================================================
+        const STORAGE_KEYS = {
+            NOTES: 'lgs_notes_v1',
+            ACTIVE_NOTE: 'lgs_active_note_v1',
+            CALC_HISTORY: 'lgs_calc_history_v1',
+            BUDGET_TX: 'lgs_budget_lkr_v1'
+        };
+
+        function readLocal(key, fallback) {
+            try {
+                const raw = localStorage.getItem(key);
+                return raw !== null ? JSON.parse(raw) : fallback;
+            } catch (e) {
+                return fallback;
+            }
+        }
+
+        function writeLocal(key, value) {
+            try {
+                localStorage.setItem(key, JSON.stringify(value));
+            } catch (e) {
+                showToast('Storage quota warning');
+            }
+        }
+
+        let toastTimer = null;
+        function showToast(msg) {
+            const banner = document.getElementById('toastBanner');
+            document.getElementById('toastMessage').textContent = msg;
+            banner.classList.remove('translate-y-20', 'opacity-0');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
+                banner.classList.add('translate-y-20', 'opacity-0');
+            }, 2200);
+        }
+
+        // =========================================================
+        // 3. SEGMENTED PILL TAB NAVIGATION
+        // =========================================================
+        function switchTab(index) {
+            const thumb = document.getElementById('segmentedThumb');
+            thumb.style.transform = `translateX(${index * 100}%)`;
+
+            document.querySelectorAll('.segmented-btn').forEach((btn, idx) => {
+                const isActive = idx === index;
+                btn.classList.toggle('active', isActive);
+                btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
+            });
+
+            [0, 1, 2].forEach((idx) => {
+                const sec = document.getElementById(`module-${idx}`);
+                if (idx === index) {
+                    sec.classList.remove('hidden');
+                    sec.classList.add('flex');
+                } else {
+                    sec.classList.add('hidden');
+                    sec.classList.remove('flex');
+                }
+            });
+        }
+
+        // =========================================================
+        // 4. MODULE 1: RICH TEXT NOTEPAD (AUTO-SAVE)
+        // =========================================================
+        let notes = readLocal(STORAGE_KEYS.NOTES, null);
+        if (!Array.isArray(notes) || notes.length === 0) {
+            notes = [
+                {
+                    id: 'note-' + Date.now(),
+                    title: 'Welcome to Liquid Glass Notes',
+                    content: '<div>Capture ideas, checklists, and meeting notes effortlessly. Everything you type is <b>automatically saved</b> to your device storage for instant offline access.</div>',
+                    updatedAt: Date.now()
+                }
+            ];
+            writeLocal(STORAGE_KEYS.NOTES, notes);
+        }
+
+        let activeNoteId = readLocal(STORAGE_KEYS.ACTIVE_NOTE, notes[0].id);
+        if (!notes.some(n => n.id === activeNoteId)) {
+            activeNoteId = notes[0].id;
+        }
+
+        const noteTitleInput = document.getElementById('noteTitleInput');
+        const richEditor = document.getElementById('richEditor');
+        const noteSearchInput = document.getElementById('noteSearchInput');
+        const notePillsContainer = document.getElementById('notePillsContainer');
+        const noteSaveBadge = document.getElementById('noteSaveBadge');
+        const noteStats = document.getElementById('noteStats');
+        const noteUpdatedMeta = document.getElementById('noteUpdatedMeta');
+
+        function renderNotePills() {
+            const query = noteSearchInput.value.trim().toLowerCase();
+            const filtered = notes.filter(n => {
+                const plain = (n.title + ' ' + n.content.replace(/<[^>]*>/g, ' ')).toLowerCase();
+                return plain.includes(query);
+            });
+
+            notePillsContainer.innerHTML = '';
+            if (filtered.length === 0) {
+                notePillsContainer.innerHTML = `<span class="text-xs text-[#5A617A] py-1">No matching notes found</span>`;
+                return;
+            }
+
+            filtered.forEach(note => {
+                const isSelected = note.id === activeNoteId;
+                const pill = document.createElement('button');
+                pill.type = 'button';
+                pill.className = isSelected
+                    ? 'px-3.5 py-1.5 rounded-full text-xs font-bold bg-white/95 text-violet-700 shadow-sm border border-white flex-shrink-0 transition'
+                    : 'px-3.5 py-1.5 rounded-full text-xs font-medium bg-white/45 hover:bg-white/75 text-[#5A617A] border border-white/70 flex-shrink-0 transition';
+                pill.textContent = note.title.trim() || 'Untitled Note';
+                pill.onclick = () => {
+                    activeNoteId = note.id;
+                    writeLocal(STORAGE_KEYS.ACTIVE_NOTE, activeNoteId);
+                    loadActiveNote();
+                    renderNotePills();
+                };
+                notePillsContainer.appendChild(pill);
+            });
+        }
+
+        function updateNoteStats() {
+            const text = richEditor.innerText.trim();
+            const words = text ? text.split(/\s+/).length : 0;
+            const chars = text.length;
+            noteStats.textContent = `${words} ${words === 1 ? 'word' : 'words'} • ${chars} chars`;
+        }
+
+        function loadActiveNote() {
+            const current = notes.find(n => n.id === activeNoteId) || notes[0];
+            if (!current) return;
+            activeNoteId = current.id;
+            noteTitleInput.value = current.title;
+            richEditor.innerHTML = current.content;
+            const timeStr = new Date(current.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            noteUpdatedMeta.textContent = `Saved at ${timeStr}`;
+            updateNoteStats();
+        }
+
+        let noteSaveTimeout = null;
+        function triggerNoteAutoSave() {
+            noteSaveBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-violet-500 animate-ping"></span><span>Saving...</span>`;
+            clearTimeout(noteSaveTimeout);
+            noteSaveTimeout = setTimeout(() => {
+                const idx = notes.findIndex(n => n.id === activeNoteId);
+                if (idx !== -1) {
+                    notes[idx].title = noteTitleInput.value;
+                    notes[idx].content = richEditor.innerHTML;
+                    notes[idx].updatedAt = Date.now();
+                    writeLocal(STORAGE_KEYS.NOTES, notes);
+                    const timeStr = new Date(notes[idx].updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    noteUpdatedMeta.textContent = `Saved at ${timeStr}`;
+                }
+                noteSaveBadge.innerHTML = `<i data-lucide="check-circle-2" class="w-3 h-3"></i><span>Saved to device</span>`;
+                lucide.createIcons();
+                renderNotePills();
+                updateNoteStats();
+            }, 220);
+        }
+
+        noteTitleInput.addEventListener('input', triggerNoteAutoSave);
+        richEditor.addEventListener('input', triggerNoteAutoSave);
+        noteSearchInput.addEventListener('input', renderNotePills);
+
+        document.getElementById('newNoteBtn').addEventListener('click', () => {
+            const created = {
+                id: 'note-' + Date.now(),
+                title: '',
+                content: '',
+                updatedAt: Date.now()
+            };
+            notes.unshift(created);
+            activeNoteId = created.id;
+            writeLocal(STORAGE_KEYS.NOTES, notes);
+            writeLocal(STORAGE_KEYS.ACTIVE_NOTE, activeNoteId);
+            noteSearchInput.value = '';
+            loadActiveNote();
+            renderNotePills();
+            noteTitleInput.focus();
+            showToast('New note created');
+        });
+
+        document.getElementById('deleteNoteBtn').addEventListener('click', () => {
+            if (notes.length <= 1) {
+                notes[0].title = '';
+                notes[0].content = '';
+                notes[0].updatedAt = Date.now();
+                writeLocal(STORAGE_KEYS.NOTES, notes);
+                loadActiveNote();
+                renderNotePills();
+                showToast('Note cleared');
+                return;
+            }
+            notes = notes.filter(n => n.id !== activeNoteId);
+            activeNoteId = notes[0].id;
+            writeLocal(STORAGE_KEYS.NOTES, notes);
+            writeLocal(STORAGE_KEYS.ACTIVE_NOTE, activeNoteId);
+            loadActiveNote();
+            renderNotePills();
+            showToast('Note deleted');
+        });
+
+        document.getElementById('copyNoteBtn').addEventListener('click', () => {
+            const fullText = `${noteTitleInput.value}\n\n${richEditor.innerText}`.trim();
+            const tempArea = document.createElement('textarea');
+            tempArea.value = fullText;
+            document.body.appendChild(tempArea);
+            tempArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempArea);
+            showToast('Note copied to clipboard');
+        });
+
+        function formatDoc(cmd) {
+            richEditor.focus();
+            document.execCommand(cmd, false, null);
+            triggerNoteAutoSave();
+        }
+
+        function toggleBlockquote() {
+            richEditor.focus();
+            const currentBlock = document.queryCommandValue('formatBlock');
+            if (currentBlock && currentBlock.toLowerCase() === 'blockquote') {
+                document.execCommand('formatBlock', false, 'div');
+            } else {
+                document.execCommand('formatBlock', false, 'blockquote');
+            }
+            triggerNoteAutoSave();
+        }
+
+        // =========================================================
+        // 5. MODULE 2: AUTO-LOGGING CALCULATOR
+        // =========================================================
+        let calcCurrent = '0';
+        let calcPrevious = '';
+        let calcOperator = null;
+        let calcResetNext = false;
+        let calcHistory = readLocal(STORAGE_KEYS.CALC_HISTORY, []);
+
+        const calcDisplayEl = document.getElementById('calcDisplay');
+        const calcExpressionEl = document.getElementById('calcExpression');
+        const calcHistoryListEl = document.getElementById('calcHistoryList');
+
+        function opSymbol(op) {
+            if (op === '/') return '÷';
+            if (op === '*') return '×';
+            if (op === '-') return '−';
+            return op;
+        }
+
+        function updateCalcScreen() {
+            calcDisplayEl.textContent = calcCurrent;
+            if (calcOperator && calcPrevious !== '') {
+                calcExpressionEl.textContent = `${calcPrevious} ${opSymbol(calcOperator)}`;
+            } else {
+                calcExpressionEl.textContent = calcPrevious || '0';
+            }
+        }
+
+        function calcInputDigit(digit) {
+            if (calcResetNext) {
+                calcCurrent = digit;
+                calcResetNext = false;
+            } else {
+                calcCurrent = calcCurrent === '0' ? digit : (calcCurrent.length < 15 ? calcCurrent + digit : calcCurrent);
+            }
+            updateCalcScreen();
+        }
+
+        function calcInputDot() {
+            if (calcResetNext) {
+                calcCurrent = '0.';
+                calcResetNext = false;
+            } else if (!calcCurrent.includes('.')) {
+                calcCurrent += '.';
+            }
+            updateCalcScreen();
+        }
+
+        function calcClear() {
+            calcCurrent = '0';
+            calcPrevious = '';
+            calcOperator = null;
+            calcResetNext = false;
+            updateCalcScreen();
+        }
+
+        function calcBackspace() {
+            if (calcResetNext) return;
+            if (calcCurrent.length <= 1 || (calcCurrent.length === 2 && calcCurrent.startsWith('-'))) {
+                calcCurrent = '0';
+            } else {
+                calcCurrent = calcCurrent.slice(0, -1);
+            }
+            updateCalcScreen();
+        }
+
+        function calcPercent() {
+            const val = parseFloat(calcCurrent);
+            if (!isNaN(val)) {
+                calcCurrent = String(parseFloat((val / 100).toPrecision(12)));
+                updateCalcScreen();
+            }
+        }
+
+        function calcToggleSign() {
+            if (calcCurrent === '0') return;
+            calcCurrent = calcCurrent.startsWith('-') ? calcCurrent.slice(1) : '-' + calcCurrent;
+            updateCalcScreen();
+        }
+
+        function computeMath(a, b, op) {
+            switch (op) {
+                case '+': return a + b;
+                case '-': return a - b;
+                case '*': return a * b;
+                case '/': return b === 0 ? 'Error' : a / b;
+                default: return b;
+            }
+        }
+
+        function calcInputOp(op) {
+            if (calcOperator && !calcResetNext) {
+                calcEvaluate(true);
+            }
+            calcPrevious = calcCurrent;
+            calcOperator = op;
+            calcResetNext = true;
+            updateCalcScreen();
+        }
+
+        function calcEvaluate(chaining = false) {
+            if (!calcOperator || calcPrevious === '') return;
+            const a = parseFloat(calcPrevious);
+            const b = parseFloat(calcCurrent);
+            const rawRes = computeMath(a, b, calcOperator);
+            const exprText = `${calcPrevious} ${opSymbol(calcOperator)} ${calcCurrent}`;
+
+            if (rawRes === 'Error' || isNaN(rawRes)) {
+                calcCurrent = 'Error';
+                calcPrevious = '';
+                calcOperator = null;
+                calcResetNext = true;
+                updateCalcScreen();
+                return;
+            }
+
+            const formattedResult = String(parseFloat(rawRes.toPrecision(12)));
+
+            // Automatically log calculation to localStorage tape
+            calcHistory.unshift({
+                id: 'calc-' + Date.now() + Math.random().toString(16).slice(2, 6),
+                expression: exprText,
+                result: formattedResult,
+                timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            });
+            if (calcHistory.length > 50) calcHistory.pop();
+            writeLocal(STORAGE_KEYS.CALC_HISTORY, calcHistory);
+            renderCalcHistory();
+
+            calcCurrent = formattedResult;
+            calcExpressionEl.textContent = `${exprText} =`;
+            if (!chaining) {
+                calcPrevious = '';
+                calcOperator = null;
+            }
+            calcResetNext = true;
+            calcDisplayEl.textContent = calcCurrent;
+        }
+
+        function renderCalcHistory() {
+            calcHistoryListEl.innerHTML = '';
+            if (calcHistory.length === 0) {
+                calcHistoryListEl.innerHTML = `
+                    <div class="text-center py-6 text-xs text-[#5A617A]">
+                        Evaluated calculations automatically appear here.
+                    </div>
+                `;
+                return;
+            }
+
+            calcHistory.forEach(item => {
+                const row = document.createElement('button');
+                row.type = 'button';
+                row.className = 'w-full text-left bg-white/60 hover:bg-white/85 border border-white/85 rounded-2xl px-3.5 py-2.5 flex items-center justify-between gap-2 transition';
+                row.innerHTML = `
+                    <div class="min-w-0">
+                        <div class="text-[11px] font-medium text-[#5A617A] truncate">${item.expression}</div>
+                        <div class="text-sm font-bold text-[#1E2235] truncate">= ${item.result}</div>
+                    </div>
+                    <span class="text-[10px] font-semibold text-violet-700 bg-violet-500/10 px-2 py-0.5 rounded-full flex-shrink-0">${item.timestamp}</span>
+                `;
+                row.onclick = () => {
+                    calcCurrent = item.result;
+                    calcResetNext = true;
+                    updateCalcScreen();
+                    showToast(`Recalled ${item.result}`);
+                };
+                calcHistoryListEl.appendChild(row);
+            });
+        }
+
+        document.getElementById('clearCalcHistoryBtn').addEventListener('click', () => {
+            calcHistory = [];
+            writeLocal(STORAGE_KEYS.CALC_HISTORY, calcHistory);
+            renderCalcHistory();
+            showToast('Calculation history cleared');
+        });
+
+        // =========================================================
+        // 6. MODULE 3: MONTHLY BUDGET TRACKER (SRI LANKAN RUPEES - LKR)
+        // =========================================================
+        const budgetMonthPicker = document.getElementById('budgetMonthPicker');
+        const nowDate = new Date();
+        const currentMonthStr = `${nowDate.getFullYear()}-${String(nowDate.getMonth() + 1).padStart(2, '0')}`;
+        budgetMonthPicker.value = currentMonthStr;
+
+        // Pre-populate 3 realistic Sri Lankan sample entries ONLY on first launch when localStorage is empty
+        let budgetTransactions = readLocal(STORAGE_KEYS.BUDGET_TX, null);
+        if (budgetTransactions === null) {
+            budgetTransactions = [
+                {
+                    id: 'tx-init-1',
+                    month: currentMonthStr,
+                    type: 'income',
+                    title: 'Monthly Salary',
+                    amount: 150000,
+                    category: 'Salary',
+                    date: nowDate.toLocaleDateString('en-LK', { month: 'short', day: 'numeric' })
+                },
+                {
+                    id: 'tx-init-2',
+                    month: currentMonthStr,
+                    type: 'expense',
+                    title: 'Grocery & Dining',
+                    amount: 8500,
+                    category: 'Food & Dining',
+                    date: nowDate.toLocaleDateString('en-LK', { month: 'short', day: 'numeric' })
+                },
+                {
+                    id: 'tx-init-3',
+                    month: currentMonthStr,
+                    type: 'expense',
+                    title: 'Utility Bill (CEB / Water)',
+                    amount: 4200,
+                    category: 'Bills & Utilities',
+                    date: nowDate.toLocaleDateString('en-LK', { month: 'short', day: 'numeric' })
+                }
+            ];
+            writeLocal(STORAGE_KEYS.BUDGET_TX, budgetTransactions);
+        }
+
+        let selectedTxType = 'expense';
+
+        function formatLKR(amount) {
+            const num = Number(amount) || 0;
+            return 'Rs. ' + num.toLocaleString('en-LK', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        }
+
+        function setTxType(type) {
+            selectedTxType = type;
+            const expBtn = document.getElementById('toggleExpenseBtn');
+            const incBtn = document.getElementById('toggleIncomeBtn');
+
+            if (type === 'expense') {
+                expBtn.className = 'px-3 py-1 rounded-full text-xs font-semibold bg-rose-500 text-white shadow-sm transition';
+                incBtn.className = 'px-3 py-1 rounded-full text-xs font-semibold text-[#5A617A] transition';
+            } else {
+                incBtn.className = 'px-3 py-1 rounded-full text-xs font-semibold bg-teal-500 text-white shadow-sm transition';
+                expBtn.className = 'px-3 py-1 rounded-full text-xs font-semibold text-[#5A617A] transition';
+            }
+        }
+
+        function getCategoryIcon(category) {
+            const map = {
+                'Salary': 'briefcase',
+                'Freelance': 'laptop',
+                'Food & Dining': 'utensils',
+                'Transport': 'car',
+                'Bills & Utilities': 'zap',
+                'Shopping': 'shopping-bag',
+                'Health & Fitness': 'heart-pulse',
+                'Other': 'tag'
+            };
+            return map[category] || 'tag';
+        }
+
+        function renderBudget() {
+            const chosenMonth = budgetMonthPicker.value;
+            const filtered = budgetTransactions.filter(t => t.month === chosenMonth);
+
+            let totalIncome = 0;
+            let totalExpense = 0;
+
+            filtered.forEach(tx => {
+                if (tx.type === 'income') totalIncome += Number(tx.amount);
+                else totalExpense += Number(tx.amount);
+            });
+
+            const netBalance = totalIncome - totalExpense;
+            const balancePrefix = netBalance < 0 ? '- ' : '';
+            document.getElementById('budgetNetBalance').textContent = balancePrefix + formatLKR(Math.abs(netBalance));
+            document.getElementById('budgetTotalIncome').textContent = formatLKR(totalIncome);
+            document.getElementById('budgetTotalExpense').textContent = formatLKR(totalExpense);
+
+            // Spending ratio progress bar
+            let ratioPct = 0;
+            if (totalIncome > 0) {
+                ratioPct = Math.min(100, Math.round((totalExpense / totalIncome) * 100));
+            } else if (totalExpense > 0) {
+                ratioPct = 100;
+            }
+            document.getElementById('budgetRatioText').textContent = `${ratioPct}% spent`;
+            document.getElementById('budgetRatioBar').style.width = `${ratioPct}%`;
+
+            // Transaction list
+            const txListEl = document.getElementById('budgetTxList');
+            document.getElementById('txCountBadge').textContent = `${filtered.length} ${filtered.length === 1 ? 'entry' : 'entries'}`;
+            txListEl.innerHTML = '';
+
+            if (filtered.length === 0) {
+                txListEl.innerHTML = `
+                    <div class="text-center py-6 text-xs text-[#5A617A]">
+                        No LKR transactions recorded for this month yet.
+                    </div>
+                `;
+                return;
+            }
+
+            filtered.forEach(tx => {
+                const isIncome = tx.type === 'income';
+                const row = document.createElement('div');
+                row.className = 'bg-white/65 border border-white/90 rounded-2xl px-3 py-2.5 flex items-center justify-between gap-2.5 shadow-sm';
+                row.innerHTML = `
+                    <div class="flex items-center gap-2.5 min-w-0">
+                        <div class="w-9 h-9 rounded-full ${isIncome ? 'bg-teal-500/15 text-teal-700' : 'bg-rose-500/15 text-rose-700'} flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="${getCategoryIcon(tx.category)}" class="w-4 h-4"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <p class="text-xs font-bold text-[#1E2235] truncate">${tx.title}</p>
+                            <p class="text-[10px] font-medium text-[#5A617A] truncate">${tx.category} • ${tx.date}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 flex-shrink-0">
+                        <span class="text-xs font-extrabold ${isIncome ? 'text-teal-700' : 'text-rose-700'}">
+                            ${isIncome ? '+' : '-'} ${formatLKR(tx.amount)}
+                        </span>
+                        <button type="button" aria-label="Delete Entry" data-del-id="${tx.id}" class="w-7 h-7 rounded-full hover:bg-rose-100/80 text-[#5A617A] hover:text-rose-600 flex items-center justify-center transition">
+                            <i data-lucide="x" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </div>
+                `;
+                row.querySelector('[data-del-id]').addEventListener('click', () => {
+                    budgetTransactions = budgetTransactions.filter(item => item.id !== tx.id);
+                    writeLocal(STORAGE_KEYS.BUDGET_TX, budgetTransactions);
+                    renderBudget();
+                    showToast('Transaction removed');
+                });
+                txListEl.appendChild(row);
+            });
+
+            lucide.createIcons();
+        }
+
+        document.getElementById('budgetForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const titleInput = document.getElementById('txTitle');
+            const amountInput = document.getElementById('txAmount');
+            const categorySelect = document.getElementById('txCategory');
+
+            const title = titleInput.value.trim();
+            const amount = parseFloat(amountInput.value);
+
+            if (!title || isNaN(amount) || amount <= 0) return;
+
+            budgetTransactions.unshift({
+                id: 'tx-' + Date.now(),
+                month: budgetMonthPicker.value,
+                type: selectedTxType,
+                title,
+                amount,
+                category: categorySelect.value,
+                date: new Date().toLocaleDateString('en-LK', { month: 'short', day: 'numeric' })
+            });
+
+            writeLocal(STORAGE_KEYS.BUDGET_TX, budgetTransactions);
+            titleInput.value = '';
+            amountInput.value = '';
+            renderBudget();
+            showToast(`Added ${formatLKR(amount)}`);
+        });
+
+        budgetMonthPicker.addEventListener('change', renderBudget);
+
+        // =========================================================
+        // 7. DEVICE VAULT & JSON BACKUP / IMPORT
+        // =========================================================
+        const vaultModal = document.getElementById('vaultModal');
+
+        function updateVaultStats() {
+            let totalBytes = 0;
+            Object.values(STORAGE_KEYS).forEach(k => {
+                const val = localStorage.getItem(k);
+                if (val) totalBytes += val.length * 2;
+            });
+            document.getElementById('vaultStorageSize').textContent = `${(totalBytes / 1024).toFixed(2)} KB`;
+            document.getElementById('vaultNotesCount').textContent = notes.length;
+            document.getElementById('vaultCalcCount').textContent = calcHistory.length;
+            document.getElementById('vaultBudgetCount').textContent = budgetTransactions.length;
+        }
+
+        document.getElementById('openVaultBtn').addEventListener('click', () => {
+            updateVaultStats();
+            vaultModal.classList.remove('hidden');
+        });
+
+        document.getElementById('closeVaultBtn').addEventListener('click', () => {
+            vaultModal.classList.add('hidden');
+        });
+
+        vaultModal.addEventListener('click', (e) => {
+            if (e.target === vaultModal) vaultModal.classList.add('hidden');
+        });
+
+        document.getElementById('exportBackupBtn').addEventListener('click', () => {
+            const payload = {
+                app: 'Liquid Glass Suite',
+                currency: 'LKR',
+                exportedAt: new Date().toISOString(),
+                notes,
+                calcHistory,
+                budgetTransactions
+            };
+            const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `liquid-glass-suite-backup-${new Date().toISOString().slice(0, 10)}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('JSON backup exported');
+        });
+
+        document.getElementById('importBackupInput').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                try {
+                    const data = JSON.parse(ev.target.result);
+                    if (Array.isArray(data.notes) && data.notes.length > 0) {
+                        notes = data.notes;
+                        activeNoteId = notes[0].id;
+                        writeLocal(STORAGE_KEYS.NOTES, notes);
+                        writeLocal(STORAGE_KEYS.ACTIVE_NOTE, activeNoteId);
+                    }
+                    if (Array.isArray(data.calcHistory)) {
+                        calcHistory = data.calcHistory;
+                        writeLocal(STORAGE_KEYS.CALC_HISTORY, calcHistory);
+                    }
+                    if (Array.isArray(data.budgetTransactions)) {
+                        budgetTransactions = data.budgetTransactions;
+                        writeLocal(STORAGE_KEYS.BUDGET_TX, budgetTransactions);
+                    }
+                    loadActiveNote();
+                    renderNotePills();
+                    renderCalcHistory();
+                    renderBudget();
+                    updateVaultStats();
+                    showToast('Backup restored successfully');
+                } catch (err) {
+                    showToast('Invalid backup file');
+                }
+            };
+            reader.readAsText(file);
+            e.target.value = '';
+        });
+
+        // =========================================================
+        // 8. INITIALIZE ON LOAD
+        // =========================================================
+        window.addEventListener('DOMContentLoaded', () => {
+            updateNetworkBadge();
+            loadActiveNote();
+            renderNotePills();
+            updateCalcScreen();
+            renderCalcHistory();
+            renderBudget();
+            lucide.createIcons();
+        });
+    </script>
+</body>
+</html>
